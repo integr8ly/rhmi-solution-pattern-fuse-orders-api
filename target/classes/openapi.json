@@ -1,0 +1,32 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "This is an internal API that exposes order entries contained in the system.",
+    "version" : "1.0.0",
+    "title" : "orders-internal"
+  },
+  "paths" : {
+    "/orders" : {
+      "get" : {
+        "summary" : "Returns all orders from the underlying data store.",
+        "operationId" : "get-all-orders",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Indicates that the request was processed successfully and existing orders are contained in the response body."
+          }
+        }
+      },
+      "post" : {
+        "summary" : "Create an order.",
+        "operationId" : "create-order",
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "The successful resposne upon creating an order."
+          }
+        }
+      }
+    }
+  }
+}

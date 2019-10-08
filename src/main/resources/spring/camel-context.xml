@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://camel.apache.org/schema/spring       http://camel.apache.org/schema/spring/camel-spring.xsd">
+
+    <camelContext id="context-81ec88a9-3826-4a16-9306-c88ba2f1ccc2" xmlns="http://camel.apache.org/schema/spring">
+
+        <onException>
+            <exception>java.lang.Exception</exception>
+            <handled><constant>true</constant></handled>
+            <setHeader headerName="Exchange.HTTP_RESPONSE_CODE">
+                <constant>500</constant>
+            </setHeader>
+            <setBody>
+                <simple>${exception.message}</simple>
+            </setBody>
+        </onException>
+
+        <restConfiguration component="servlet" apiContextPath="/openapi.json"/>
+
+        <rest id="rest-for-openapi-document" path="/" enableCORS="true">
+            <get id="openapi.json" produces="application/json" uri="openapi.json">
+                <description>Gets the OpenAPI document for this service</description>
+                <route id="route-for-openapi-document">
+                    <setHeader id="setHeader-for-openapi-document" headerName="Exchange.CONTENT_TYPE">
+                        <constant>application/vnd.oai.openapi+json</constant>
+                    </setHeader>
+                    <setBody id="setBody-for-openapi-document">
+                        <constant>resource:classpath:openapi.json</constant>
+                    </setBody>
+                </route>
+            </get>
+        </rest>
+
+        <rest bindingMode="json" enableCORS="true" id="rest-afe30949-719f-4574-ab55-5559e0e5ad2b">
+            <get id="get-all-orders" uri="/orders">
+                <to uri="direct:get-all-orders"/>
+            </get>
+            <post id="create-order" uri="/orders">
+                <to uri="direct:create-order"/>
+            </post>
+        </rest>
+
+        <route id="route-a36ef1f1-6b56-44ca-b058-a0bce98e7af9">
+            <from id="from-4bfddbe5-e8b7-4627-a473-c17d02d4fae4" uri="direct:get-all-orders"/>
+            <to id="to-20d9da11-7dbc-4c8c-b43b-861a3f0c8e61" uri="sql:SELECT * FROM received_orders?dataSource=dataSource"/>
+        </route>
+        <route id="route-517a1417-0686-4054-a56f-e9390e09d681">
+            <from id="from-d8522dbc-40c7-4b15-8db9-c06fb2634be6" uri="direct:create-order"/>
+            <to id="to-dbf22375-cc5e-4c04-9d8e-778f24c06571" uri="sql:INSERT INTO received_orders(product, quantity, datetime, message_id) VALUES(:#product, :#quantity, to_timestamp(:#datetime, 'YYYY-MM-DD&quot;T&quot;HH24:MI:SS.MS&quot;Z&quot;'), :#message_id)?dataSource=dataSource"/>
+        </route>
+
+        <route id="route-for-unimplemented-operations">
+            <from id="from-for-unimplemented-operations-route" uri="direct:501"/>
+            <log id="log-for-unimplemented-operations-route" message="API operation not yet implemented: ${headers.CamelHttpMethod} ${headers.CamelHttpPath}"/>
+            <setHeader id="setHeader-for-unimplemented-operations-route" headerName="Exchange.HTTP_RESPONSE_CODE">
+                <constant>501</constant>
+            </setHeader>
+            <setBody id="setBody-for-unimplemented-operations-route">
+                <simple>API operation not implemented: ${headers.CamelHttpMethod} ${headers.CamelHttpPath}</simple>
+            </setBody>
+        </route>
+
+    </camelContext>
+</beans>

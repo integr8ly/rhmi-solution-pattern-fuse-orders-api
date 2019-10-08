@@ -1,0 +1,77 @@
+---
+openapi: 3.0.2
+info:
+  title: orders-internal
+  version: 1.0.0
+  description: This is an internal API that exposes order entries contained in the
+    system.
+paths:
+  /orders:
+    description: Used to interact with orders stored in the backing data store.
+    get:
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+              examples:
+                All Orders Sample Response:
+                  value:
+                  - message_id: frontend-nodejs-ea12/0
+                    datetime: 2019-10-07T17:18:08.487Z
+                    product: Engine
+                    quantity: 1
+                  - message_id: frontend-nodejs-ea12/1
+                    datetime: 2019-10-07T17:18:10.177Z
+                    product: Shocks
+                    quantity: 2
+          description: Indicates that the request was processed successfully and existing
+            orders are contained in the response body.
+      operationId: get-all-orders
+      summary: Returns all orders from the underlying data store.
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+            examples:
+              Create Order Example:
+                value:
+                  product: Engine
+                  quantity: 1
+                  message_id: frontend/nodejs-ee21
+                  datetime: 2019-10-08T19:23:33.077Z
+        required: true
+      responses:
+        200:
+          description: The successful resposne upon creating an order.
+      operationId: create-order
+      summary: Create an order.
+components:
+  schemas:
+    Order:
+      title: Root Type for Order
+      description: An order object containing the product name, quantity ordered,
+        timestamp representing when the order was placed, and the message queue transaction/payload
+        ID.
+      type: object
+      properties:
+        product:
+          type: string
+        quantity:
+          format: int32
+          type: integer
+        datetime:
+          format: date-time
+          type: string
+        message_id:
+          type: string
+      example:
+        product: Engine
+        quantity: 1
+        datetime: 2019-10-07T17:18:08.487Z
+        message_id: frontend-nodejs-ea12/0
