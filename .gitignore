@@ -12,6 +12,7 @@
 
 # Package Files #
 *.jar
+*.jar.original
 *.war
 *.nar
 *.ear
@@ -30,3 +31,6 @@ hs_err_pid*
 target/fabric8/
 target/docker/
 target/classes/META-INF/fabric8/
+target/maven-archiver/
+target/orders-internal-is.yml
+target/s2i-env-orders-internal-latest
