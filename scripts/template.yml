@@ -37,7 +37,16 @@ objects:
           deploymentconfig: rhmi-lab-internal-fuse-api
       spec:
         containers:
-        - image: quay.io/evanshortiss/rhmi-lab-internal-fuse-api
+        - env:
+          - name: PG_HOSTNAME
+            value: ${PG_HOSTNAME}
+          - name: PG_DATABASE
+            value: ${PG_DATABASE}
+          - name: PG_USERNAME
+            value: ${PG_USERNAME}
+          - name: PG_PASSWORD
+            value: ${PG_PASSWORD}
+          image: quay.io/evanshortiss/rhmi-lab-internal-fuse-api
           imagePullPolicy: Always
           name: rhmi-lab-internal-fuse-api
           ports:
