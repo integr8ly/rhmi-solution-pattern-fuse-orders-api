@@ -1,4 +1,6 @@
 ---
+# This file was used to generate the Camel application, but we also need to
+# keep the 2.0 JSON version for integration with current Fuse Online
 openapi: 3.0.2
 info:
   title: orders-internal

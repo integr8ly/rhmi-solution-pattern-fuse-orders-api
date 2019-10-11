@@ -1,32 +1,118 @@
 {
-  "swagger" : "2.0",
-  "info" : {
-    "description" : "This is an internal API that exposes order entries contained in the system.",
-    "version" : "1.0.0",
-    "title" : "orders-internal"
+  "swagger": "2.0",
+  "info": {
+      "title": "orders-internal",
+      "version": "1.0.0",
+      "description": "This is an internal API that exposes order entries contained in the system."
   },
-  "paths" : {
-    "/orders" : {
-      "get" : {
-        "summary" : "Returns all orders from the underlying data store.",
-        "operationId" : "get-all-orders",
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "Indicates that the request was processed successfully and existing orders are contained in the response body."
+  "paths": {
+      "/orders": {
+          "get": {
+              "produces": [
+                  "application/json"
+              ],
+              "responses": {
+                  "200": {
+                      "description": "A successful JSON response containing an Array of Order Objects.",
+                      "schema": {
+                          "type": "array",
+                          "items": {
+                              "$ref": "#/definitions/Order"
+                          }
+                      }
+                  }
+              },
+              "operationId": "get-all-orders",
+              "summary": "Returns all orders from the underlying data store.",
+              "description": "Returns all orders from the underlying data store."
+          },
+          "post": {
+              "consumes": [
+                  "application/json"
+              ],
+              "parameters": [
+                  {
+                      "name": "body",
+                      "description": "The Order Object you'd like to store in the database.",
+                      "schema": {
+                          "$ref": "#/definitions/CreateOrderObject"
+                      },
+                      "in": "body",
+                      "required": true
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "The created Order.",
+                      "schema": {
+                          "$ref": "#/definitions/Order"
+                      }
+                  }
+              },
+              "operationId": "create-order",
+              "summary": "Create an order.",
+              "description": "Create an order."
           }
-        }
-      },
-      "post" : {
-        "summary" : "Create an order.",
-        "operationId" : "create-order",
-        "parameters" : [ ],
-        "responses" : {
-          "200" : {
-            "description" : "The successful resposne upon creating an order."
-          }
-        }
       }
-    }
+  },
+  "definitions": {
+      "Order": {
+          "title": "Root Type for Order",
+          "description": "An order object containing the product name, quantity ordered, timestamp representing when the order was placed, and the message queue transaction/payload ID.",
+          "type": "object",
+          "properties": {
+              "product": {
+                  "description": "Name of the product being ordered.",
+                  "type": "string"
+              },
+              "datetime": {
+                  "format": "int32",
+                  "description": "The time the order was placed.",
+                  "type": "integer"
+              },
+              "quantity": {
+                  "format": "int32",
+                  "description": "Desired quantity.",
+                  "type": "integer"
+              },
+              "message_id": {
+                  "description": "The ID of the message placed in AMQ to create this order.",
+                  "type": "string"
+              }
+          },
+          "example": {
+              "product": "Engine",
+              "datetime": 1570735225285,
+              "quantity": 1,
+              "message_id": "frontend/nodejs-3ef1"
+          }
+      },
+      "CreateOrderObject": {
+          "title": "Root Type for CreateOrderObject",
+          "description": "The object required to create an Order",
+          "type": "object",
+          "properties": {
+              "product": {
+                  "type": "string"
+              },
+              "quantity": {
+                  "format": "int32",
+                  "type": "integer"
+              },
+              "message_id": {
+                  "type": "string"
+              },
+              "datetime": {
+                  "format": "date-time",
+                  "type": "string"
+              }
+          },
+          "example": {
+              "product": "Engine",
+              "quantity": 1,
+              "message_id": "frontend/nodejs-ec41",
+              "datetime": "2019-10-10T19:28:35.840Z"
+          }
+      }
   }
 }

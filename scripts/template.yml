@@ -82,8 +82,8 @@ objects:
   kind: Route
   metadata:
     labels:
-      app: rhmi-lab-internal-fuse-api
-    name: rhmi-lab-internal-fuse-api
+      app: orders-fuse-api
+    name: orders-fuse-api
   spec:
     port:
       targetPort: 8080-tcp
