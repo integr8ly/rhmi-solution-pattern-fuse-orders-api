@@ -7,6 +7,19 @@ This is an internal API that exposes order entries contained in the system.
 You can regenerate this service by uploading the *orders-internal.yaml* file
 to Apicurio Studio.
 
+### Build an Image
+
+[source-to-image (s2i)](https://docs.okd.io/latest/creating_images/s2i.html) is
+used to generate builds.
+
+The commands are as follows once you have Docker and s2i installed:
+
+```bash
+export CONTAINER_NAME=rhmi-lab-internal-fuse-api
+docker pull registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift 
+s2i build . registry.access.redhat.com/redhat-openjdk-18/openjdk18-openshift $CONTAINER_NAME
+```
+
 ### Database Configuration
 
 A PostgreSQL 9.6 instance is necessary to use this service. The connection

@@ -20,10 +20,10 @@ endpoints:
 # postgresql connection details
 postgresql:
   service:
-    hostname: ${PG_HOSTNAME:my-database.evals25-tutoria-cce2.svc}
-    database: ${PG_DATABASE:my_data}
-    username: ${PG_USERNAME:luke}
-    password: ${PG_PASSWORD:secret}
+    hostname: ${PG_HOSTNAME:orders-db.namespace-name.svc }
+    database: ${PG_DATABASE:orders}
+    username: ${PG_USERNAME:evalsNN}
+    password: ${PG_PASSWORD:password}
 
 # database configuration
 spring:
