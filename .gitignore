@@ -26,6 +26,7 @@ hs_err_pid*
 # editors
 .vscode
 .idea
+.settings
 
 # fabric8
 target/fabric8/
